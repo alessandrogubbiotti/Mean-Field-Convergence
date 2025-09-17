@@ -1,0 +1,47 @@
+# LaTeX intermediate files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex(busy)        # temporary lock file
+
+# Bibliography
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+
+# Nomenclature / Index / Glossaries
+*.nlo
+*.nls
+*.ilg
+*.ind
+*.idx
+*.glo
+*.gls
+*.glg
+*.ist
+*.acr
+*.alg
+
+# Beamer
+*.nav
+*.snm
+
+# XeLaTeX / LuaLaTeX
+*.xdv
+
+# Editors
+*~
+*.swp
+*.bak
+
+# latexmk
+latexmkrc
+
