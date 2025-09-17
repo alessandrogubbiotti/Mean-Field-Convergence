@@ -24,12 +24,6 @@ or
 2) Joint small scale time step, zero temperature limit of a one dimrnsoìional system. This should be done with Nadia Ansini
 ##### Mean field systems 
 
-System of particles usually are used as a model for thermodynamical system to recover the laws of thermodynamics for averaged quantities such as the empirical density and the empirical flow. The easiest interaction that one can place (or better, the second easiest apart from the interction when particles do not interact) is the mean field interaction. This is a hot topic of research in for singular, mean field interaction. 
-
-
-
-##### Plan??
- 
-We could try to start proving the convergence io
+System of particles usually are used as a model for thermodynamical system to recover the laws of thermodynamics for averaged quantities such as the empirical density and the empirical flow. The easiest interaction that one can place (or better, the second easiest apart from the interction when particles do not interact) is the mean field interaction. This is a hot topic of research, especially for singular, mean field interaction. 
 
 - 
