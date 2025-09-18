@@ -1,0 +1,594 @@
+\documentclass[reqno]{amsart}
+%PACKAGES
+%\usepackage[english,english]{babel}
+\usepackage{amsmath}
+%\usepackage{amsthm, amsfonts, latexsym, amssymb}
+\usepackage{mathrsfs}
+%\usepackage{enumerate}
+%\usepackage{graphics,epsfig,color}
+\usepackage[notcite,notref]{showkeys}
+%%mathtools allows 'showonlyrefs'
+%%that will show only
+%%equation-numbers/references
+%%actually cited in the paper
+\usepackage{mathtools} 
+\mathtoolsset{showonlyrefs}
+%%esint allows some special integral symbols
+%\usepackage{esint}
+
+%TYPEFACE
+%\setlength{\oddsidemargin}{5mm}
+%\setlength{\evensidemargin}{5mm}
+%\setlength{\textwidth}{145mm}
+%\setlength{\headheight}{0mm}
+%\setlength{\headsep}{12mm}
+%\setlength{\topmargin}{0mm}
+%\setlength{\textheight}{220mm}
+%\setcounter{secnumdepth}{2}
+%\numberwithin{equation}{section}
+
+%NEWTHEOREMS
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{assumption}[theorem]{Assumption}
+
+%%%NUMBERING
+\numberwithin{equation}{section}
+\numberwithin{theorem}{section}
+%\setcounter{secnumdepth}{2}
+
+%NEWCOMMANDS
+%%%%%TYPEFACE
+\newcommand{\mc}[1]{{\mathcal #1}}
+\newcommand{\mf}[1]{{\mathfrak #1}}
+\newcommand{\mb}[1]{{\mathbf #1}}
+\newcommand{\bb}[1]{{\mathbb #1}}
+\newcommand{\scr}[1]{{\mathscr #1}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\un}[1]{{\mathbf 1}_{#1}}
+%%%%%OVERLINE-UNDERLINE IN MATHMODE
+\newcommand{\upbar}[1]{\,\overline{\! #1}}
+\newcommand{\downbar}[1]{\underline{#1\!}\,}
+%%%%%GAMMA-LIMITS
+\newcommand{\Glimsup}{\mathop{\textrm{$\Gamma\!\!$--$\varlimsup$}}}
+\newcommand{\Gliminf}{\mathop{\textrm{$\Gamma\!\!$--$\varliminf$}}}
+\newcommand{\Glim}{\mathop{\textrm{$\Gamma\!\!$--$\lim$}}}
+%%%%%EQUATIONS
+\newcommand{\bel}[2]{\begin{equation} \label{#1} \begin{split} #2
+ \end{split} \end{equation}}
+%\newcommand{\eesl}{ }
+%%%%%PAPER-SPECIFIC COMMANDS
+\newcommand{\Lip}[1]{\mathrm{Lip}_{#1}(F)}
+%%%%%RESTRICTION
+\newcommand{\res}{\mathop{\hbox{\vrule height 7pt width .5pt depth
+  0pt\vrule height .5pt width 6pt depth 0pt}}\nolimits}
+%%%%%INDICATOR
+%Type1
+%\newcommand{\id}{{1 \mskip -5mu {\rm I}}}
+%\def\un#1{\hbox{{\textbf 1}$_{#1}$}}
+%Type2
+%\newfont{\indic}{bbmss12}
+%\newcommand{\un}[1]{{\indic 1}_{#1}}
+%\newcommand{\un}[1]{\hbox{{\indic 1}$_{#1}$}}
+%Type3
+%\newfont{\indic}{cmssbx10}
+%\def\un#1{\hbox{{\indic 1}$_{#1}$}}
+%%%%%SKIP
+%\long\def\skipit#1{\relax}
+%%%%%LLANGLE
+\newcommand{\dangle}[2]{\langle #1,\,#2 \rangle}
+\newcommand{\llangle}{\langle \!\langle}
+\newcommand{\rrangle}{\rangle \!\rangle}
+\newcommand{\ddangle}[2]{\llangle #1,\,#2 \rrangle}
+%%%%%COMMENT
+\usepackage{color}
+\definecolor{light}{gray}{.90}
+\newcommand{\comment}[1]{
+%%$\phantom .$ %higher inteline before comment
+\par\noindent
+\colorbox{light}{\begin{minipage}{120 mm}#1\end{minipage}}
+\par\noindent
+}
+
+%%%%%%%%%%PAPER SPECIFIC
+%%%%%%PRODUCTX%%%If we want to change the notation later.
+\newcommand{\und}[1]{\downbar{#1}}
+\newcommand{\undx}{\downbar{x}}
+\newcommand{\undy}{\downbar{y}}
+\newcommand{\visc}{\nu}
+
+
+
+
+
+
+
+%%\author[M.Mariani]{Mauro Mariani}
+%%\address{Mauro Mariani, Dipartimento di Matematica, Universit\`a degli Studi di Roma La Sapienza, Piazzale Aldo Moro 5, 00185, Roma, Italy.}
+%%\email{mariani@mat.uniroma1.t}
+
+%\author[]{???}
+
+\title{Propagation of chaos for mean-field models}
+
+%\date{\today}
+
+\begin{document}
+\begin{abstract}
+Some notes about convergence and fluctuations of mean-field models.
+\end{abstract}
+
+\maketitle
+%\tableofcontents
+%\setcounter{tocdepth}{1}
+
+\section{Introduction and result}
+\label{s:1}
+We are concerned with the limiting behavior of the empirical measure and current of mean-field interacting Brownian motions. We deal with the general framework of a smooth Riemmanian manifold $(M,g)$, with smooth (possibly empty), reflecting boundary $\partial M$. A system of $N$ mean-field interacting Brownian particles, is a stochastic differential equation of the form
+\bel{e:mf}{
+& dX_i= \frac 1N\sum_{j=1}^N K(X_i,X_j)\,dt+\sqrt{\visc}\, dW_i(t) \qquad i=1,\ldots,\,N
+\\
+& X_i(0)=x_{0,i}
+}
+where
+%% $U\colon M\to [-\infty,+\infty]$ and $K\colon M^{\otimes 2}\to TM$ are the pinning and interaction potentials, $\nabla$ is the co??????variant gradient
+$\visc>0$ is a constant viscosity coefficient and the $W_i$ are independent Brownian motions on $M$, and reflection conditions are assumed at the boundary $\partial M$. Precise definitions and notations are given in the next section. Typical cases include $K(x,y)=F(x-y)$ on $\bb R^2$, and in particular the McKean vortexes models (converging to a Navier-Stokes equation) \cite{Mc}, and the Keller-Segel system \cite{KS}.
+
+One is generally interested in investigating the limiting behavior of the system \eqref{e:mf} in the thermodynamic limit, namely when $N$ is large. A typical observable in this context is the empirical measure $\theta_N(t):=\tfrac 1N \sum_{i=1}^N \delta_{X_i(t)}$. Assuming $\theta_N(0)\to u_0\,dx$, one expects that, as the number of particles $N$ diverges to infinity,  $\theta_N$ approximates a continuous density $u(t,x)$, that is a weak solution to the parabolic equation
+\bel{e:gng}{
+& \partial_t u+\nabla \cdot \left(u \,K[u]\right)=\frac{\visc}2 \Delta u\qquad \text{on $M$}
+\\
+& \nabla u\cdot \hat n=0 \qquad \text{on $\partial M$}
+\\
+& u(0,x)=u_0(x)
+}
+where $K[\cdot]$ is the operator $K[u](x):=\int K(x,y)u(y)dy$,
+ $\Delta$ is the Beltrami-Laplace operator, and $\hat n$ is the normal to $\partial M$.
+ 
+More recently, the macroscopic fluctuation theory  focused the interest on an observable other than (and indeed richer than) the empirical measure, namely the empirical current $J_N$ defined weakly as
+\bel{e:curr1}{
+\dangle{dJ_N(t)}{\omega}:=\frac 1N \sum_{i=1}^N\omega(X_i(s))\circ dX_{i}(s)
+}
+The analogue of the convergence result to \eqref{e:gng} in the context of currents, is the convergence of the couple $(\theta_N,J_N)$ to the solution $(u,J)$ of the system
+\bel{e:gng2}{
+& \partial_t u+\nabla \cdot J=0
+\\
+& J=u\,K[u] - \frac{\visc}2 \nabla u
+}
+with boundary and initial data given similarly to \eqref{e:gng}. Note that this is a stronger statement, since from the convergence of $\theta_N$ to \eqref{e:gng} one can only recover the limiting current $J$ up to a divergence-free (and time dependent) additive current.
+
+Convergence results for $\theta_N$, or even for $J_N$ are not hard to prove rigorously, if one assumes that $K[\cdot]$ is a continuous operator in a suitable topology. However, the most interesting models do feature interaction kernels $K(\cdot,\cdot)$ with singularities. Convergence of the empirical measure for such models has been the object of intense mathematical investigation in the last decades. Here we cite the early results by Osada \cite{Os86} for the vortexes model, the much more recent paper \cite{FHM} that finally proved the convergence in this case, and \cite{GQ} which proves convergence for sub-critical Keller-Segel models.
+
+In this paper we aim to build over the technique introduced in \cite{Fa14} to prove this type of convergence results, and we apply it to two classes of systems, including?????? the aforementioned vortexes and Keller-Segel models, where $M\subset \bb R^{n}$ or $M=\bb T^{n}$:
+%%\begin{itemize}
+%%\item[(i)] The case $K(x,y)=-(\nabla U)(x)-(\nabla V)(x-y)$. We refer to this case as to the \emph{gradient case}.
+%%
+%%\item[(ii)] The case $K(x,y)=-(\nabla U)(x)-\nabla V(x,y)+\eta (\nabla H)(x,y)$, where $\eta$ is a symplectic form on $M$. We refer to this case as the \emph{generic case.}
+%%\end{itemize}
+%%Informally speaking, the first case is a special case of the second one, taking $H=0$. However, since symplectic forms only exists in even dimensions, we prefer to keep the two cases as distinct.
+
+\begin{theorem}
+\label{t:conv1}
+Assume that ??????. Then $(\theta_N,J_N)$ converges in law to the solution to \eqref{e:gng2}.
+\end{theorem}
+
+\begin{theorem}
+\label{t:conv2}
+Assume that ??????. Then $(\theta_N,J_N)$ satisfies a large deviations principle with speed $N$, and good rate function $I$ given by \eqref{e:ldfunc1} (see also \eqref{e:ldfunc2}).
+\end{theorem}
+
+
+\subsection{Mean-field models and variational techniques}
+\label{ss:1.1}
+
+\subsection{Main result}
+\label{ss:1.2}
+
+
+\section{The variational approach}
+\label{s:2}
+In this section we first introduce some precise notation, and next describe a variational technique to prove propagation of chaos.
+
+
+\subsection{The smooth case}
+\label{ss:2.1}
+Hereafter $(M,g)$ is a smooth Riemmanian manifold without boundary, and we fix $T>0$ to be interpreted as a final time. Elements of $M$ are denoted with latin letters $x,\,y$ etc. Fixed $N\in \bb N^+$, elements of the product manifold $M^{\otimes N}$ are denoted $\undx\equiv (x_1,\ldots,\,x_N)$. We denote by $dx$ and $d\undx$ the volume measure on $M$ and $M^{\otimes N}$ respectively. $\mc P(M)$, $\mc V(M)$ and $\mc J(M)$ are respectively the spaces of Borel probability measures, and distributional vector fields and currents on $M$. Then we regard the kernel $K$ as a map $K\colon M\to \mc V(M)$, meaning that $K$ maps $y\in M$ in the vector field $(K(x,y))_{x\in M}$. 
+%For a smooth function $U\in C^1(M\times M)$, we denote 
+%$(\nabla_x U)$ and $(\nabla_y U)$ the gradient w.r.t.\ the 
+%first and second variable respectively. 
+
+We assume that
+\begin{itemize}
+\item[(A1)] $\visc=2$ (with no loss of generality).
+
+\item[(A2)] $(M,g)$ is compact, and without boundary.
+
+\item[(A3)] The solution (in law) to \eqref{e:mf} is a Feller process on $M^{\otimes N}$ with generator
+\bel{e:gen}{
+(L_N f)(\undx):= \tfrac{1}2 (\Delta_N f)(\undx) +\frac 1N \sum_{i,j=1}^N K(x_i,x_j) (\nabla_i f)(\undx)
+}
+
+\item[(A4)] There exists $U\in C^1(M\times M)$ such that the $\sigma$-finite measure
+\bel{e:pin}{
+d\pi_N(\undx)= d\undx \exp\left(- \tfrac{1}{N} \sum_{i,j=1}^N U(x_i,x_j)\right)
+}
+is invariant, namely $\pi_N L_N=0$. With no loss of generality, we assume $U(x,y)=U(y,x)$, and we denote $(\nabla U)(x,y):= (\nabla_1 U)(x,y)=(\nabla_2 U)(y,x)$.
+\end{itemize}
+
+%%\comment{Fixed $N$, looks for the the invariant measure in the form $\pi_N(\undx)=\exp(-\visc^{-1}V(\undx))d\undx$. Then $V$ satisfies
+%%\bel{e:scm}{
+%% b_i(\undx) & =\tfrac 1N \sum_{j=1}^NK(x_i,x_j)
+%%\\
+%% N \sum_i \nabla_i \cdot b_i  & = \sum_{i,j} \nabla_i \cdot( K(x_i,x_j))=\sum_{i,j} (\nabla_y \cdot K)(x_i,x_j)+(\nabla_j\cdot K)(x_i,x_j)\delta_{ij}
+%%\\
+%%& =\sum_{i} (\nabla_i \cdot K)(x_i,x_i)+\sum_{i,j} (\nabla_y \cdot K)(x_i,x_j)
+%%}
+%%
+%% 
+%%\bel{e:invpar1}{
+%%\tfrac{1}2 \dangle{\nabla V}{\nabla V^\sharp}_{\undx}+\frac 1N\sum_{i,j=1}^N K(x_i,x_j) \cdot \nabla_i V=\tfrac{\visc}2 \Delta V+\tfrac{\visc}N \left[\sum_{i} (\nabla_i \cdot K)(x_i,x_i)+\sum_{i,j} (\nabla_y \cdot K)(x_i,x_j)\right]
+%%}
+%%Now, if $V(\undx)=\sum_{j=1}^N U(x_j)$, then the previous equation turns into
+%%
+%%\bel{e:invpar2}{
+%%\sum_{i=1}^N \Big[
+%%& \tfrac{1}{2} \dangle{\nabla U}{\nabla U^\sharp}_{x_i}+
+%%\frac{1}{N}\sum_{j=1}^N K(x_i,x_j) \cdot (\nabla U)(x_i)
+%%\\
+%%& -\tfrac{\visc}2  (\Delta U)(x_i)-\frac{\visc}N (\nabla_i \cdot K)(x_i,x_i)-\tfrac{\visc}{N}\sum_{j=1}^N (\nabla_y \cdot K)(x_i,x_j)
+%%\Big]=0
+%%}
+%%}
+
+We introduce the space
+\bel{e:meascurr}{
+\mc X_N:=\left\{(\mu_\cdot,J_\cdot)\in C\left([0,T];\mc P(M^{\otimes N})\times \mc J(M^{\otimes N})\right)\,:\: \partial_t\mu +\nabla \cdot J=0\,\text{weakly}
+\right\}
+}
+and $\mc X\equiv \mc X_1$.
+
+Given $\mu \in \mc P(M)$, define the current $\upbar J^\mu$ as
+\bel{e:jmu1}{
+\dangle{\upbar J^\mu}{\omega}&:=\int_M d\mu(x) \left(\dangle{K[\mu]}{\omega}_x + (\nabla \cdot\omega^\sharp)(x)\right)
+}
+
+\begin{definition}
+\label{d:mec}
+A solution to the \emph{mean-field equation for currents}, with initial data $\mu_0\in \mc P(M)$, is a curve $(\mu,J)\in \mc X$ such that $\mu_{t=0}=\mu_0$ and for a.e.\ $t\in [0,T]$
+\bel{e:mec}{
+J_t=\upbar J^{\mu_t}
+%\dangle{J_t}{\omega}=\int_M d\mu_t(x) \dangle{K[\mu_t]}{\omega}_x -\tfrac 12 (d\omega)(x)
+}
+namely \eqref{e:gng2} holds weakly.
+\end{definition}
+
+\begin{remark}
+\label{r:mec1}
+If $(\mu,J)$ is a solution to the mean-field equation for currents, then $(\mu_t)$ is a weak solution to \eqref{e:gng}.
+
+Conversely, if $\mu_t$ solves \eqref{e:gng} weakly and $(\mu,J)\in \mc X_N$, then $J_t-\upbar J^{\mu_t}$ is divergence-free.
+\end{remark}
+Let $I \colon \mc X \to [0,+\infty]$ be defined as
+\bel{e:ldfunc1}{
+I(\mu,J):= &
+\sup_{\omega \in C([0,T];\Omega)}
+ \int_{[0,T]} dt\, \left[ \dangle{J_t-\upbar J^{\mu_t}}{\omega_t} -\tfrac 12\int_M d\mu_t(x) \dangle{ \omega_t^\sharp}{\omega_t}_x\right]
+ \\
+% =:& \tfrac 12 \int_{[0,T]}dt\,\left\|J_t-\upbar J^{\mu_t}\right\|_{\mu_t}^2
+}
+\begin{remark}
+\label{r:ldfunc1}
+$I$ is convex, has compact sub-level sets, and $I(\mu,J)=0$ iff $(\mu,J)$ solves the mean-field equation for currents \eqref{e:mec}.
+%% Moreover if $I(\mu,J)<+\infty$ then there exist a probability density $\varrho_t$ and $\jmath_t\in \mc V(M)$ such that for a.e.\ $t\in [0,T]$
+%%\bel{e:density}{
+%%d\mu_t=\varrho_t d\pi, \qquad J_t=\pi \jmath_t
+%%}
+\end{remark}
+
+
+\begin{proposition}
+Suppose that $I(\mu,J)<+\infty$. Then
+\label{r:ldfunc2}
+\bel{e:ldfunc2}{
+I(\mu,J)& =S(\mu_T)-S(\mu_0)+\tfrac 12 \int_{[0,T]}dt\,\left[\mc E(\mu_t)+\left\|J_t-\upbar J^{a,\mu_t}\right\|_{\mu_t}^2
+\right]
+}
+\end{proposition}
+\begin{proof}
+\bel{e:decmec4}{
+I(\mu,J)=\tfrac 12 \int_{[0,T]}dt\,\left\|J_t-\upbar J^{a,\mu_t}\right\|_{\mu_t}^2+\left\|\upbar J^{s,\mu_t}\right\|_{\mu_t}^2+\left\langle \upbar J^{a,\mu_t}-J_t,\upbar J^{s,\mu_t} \right\rangle_{\mu_t}
+}
+ Moreover
+\end{proof}
+
+
+Let $S,\,\mc E\colon \mc P(M)\to [0,+\infty]$ be defined as
+\bel{e:qp1}{
+S(\mu):= 
+\begin{cases}
+ \int d\mu(x)d\mu(y)\, U(x,y)+\int d\mu(x)\,\log \tfrac{d\mu}{dx} & \text{if $\mu \ll dx$}
+\\
+ +\infty & \text{otherwise}
+\end{cases}
+}
+\bel{e:qp2}{
+\mc E(\mu):= 
+\begin{cases}
+ \int d\pi^\mu(x)\,\frac{|\nabla \varrho^\mu|^2(x)}{\varrho^\mu(x)}
+  & \text{if $\mu \ll \pi^\mu$}
+\\
+ +\infty & \text{otherwise}
+\end{cases}
+}
+Since $U$ is smooth, $S$ has a unique minimizer on $\mc P(M)$ that we denote $\bar \pi$. It satisfies $\bar \pi(dx):=dx\,\exp(-U[\pi])$.
+\newpage
+
+
+%%%START%COMMENT
+\comment{
+If $\mu\in \mc P(M)$ and $\xi\in \mc V(M)$, the current $\mu\,\xi\in \mc J(M)$ is understood as
+\bel{e:curvec}{
+\dangle{\mu\,\xi}{\omega}=\int d\mu(x)\,\dangle{\xi}{\omega}_x
+}
+
+Given $\mu \in \mc P(M)$, define the currents $\upbar J^{a,\mu},\,\upbar J^{s,\mu}$ as
+\bel{e:jmu}{
+& \upbar J^{a,\mu}:=\mu \left(K[\mu]+(\nabla U[\mu])^\sharp\right)=\mu\,c[\mu]
+\\
+& \upbar J^{s,\mu}:= \upbar J^{\mu}-\upbar J^{a,\mu}=-\mu (\nabla U[\mu])^\sharp-\tfrac 12 \nabla \mu
+}
+Then setting $\upbar \pi^\mu(dx):=\exp(-U[\mu])dx$, and $h^\mu(x):=(\frac{d\mu}{d\upbar \pi^\mu}(x))^{1/2}=:(\varrho^\mu)^{1/2}$
+\bel{e:scal1}{
+\dangle{\upbar J^{s,\mu}}{\upbar J^{s\mu}}_\mu 
+&=
+\int d\mu(x)\,\dangle{\nabla U[\mu]+ \tfrac 12 \nabla \log \mu}{\nabla U[\mu]+\tfrac 12 \nabla \log \mu}_x
+\\ & 
+=\tfrac 14 \int d\pi^\mu(x) \frac{1}{\varrho^\mu(x)} \dangle{ (\nabla \varrho^\mu)^\sharp}{ \nabla\varrho^\mu}_x
+\\ &
+= \int d\pi^\mu(x)\dangle{ (\nabla h^\mu)^\sharp}{ \nabla h^\mu}_x
+}
+
+\bel{e:scal2}{
+\dangle{\upbar J^{a,\mu}}{\upbar J^{s\mu}}_\mu& =-\int d\mu(x) \dangle{c[\mu]}{\nabla U[\mu]+\tfrac 12 \nabla \log \mu}_x
+\\ &
+=\int d\mu(x) \left( (\nabla \cdot c[\mu])(x)- \dangle{c[\mu]}{\nabla U[\mu]}_x\right)=0
+}
+
+\bel{e:scal3a}{
+\dangle{J}{\upbar J^{s,\mu_t}}_\mu& =- \dangle{J}{\nabla U[\mu]+\tfrac 12 \nabla \log \mu}
+\\
+&=\dangle{ \nabla \cdot J}{ U[\mu]+\tfrac 12 \log \mu}=
+\tfrac 12 \dangle{ \nabla \cdot J}{\log \varrho^\mu}
+}
+In particular if $(\mu,J)\in \mc X$
+\bel{e:scal3b}{
+\int_{[0,T]}dt\,\dangle{J_t}{\upbar J^{s,\mu_t}}_\mu
+& =
+-\tfrac 12 \int_{[0,T]}dt\,\dangle{ \partial_t \mu_t}{U[\mu]+\tfrac 12 \log \mu}
+\\ & =
+\tfrac 12 S(\mu_T)-\tfrac 12 S(\mu_0)}
+
+}
+
+\comment{
+\bel{e:conto1}{
+\int d\mu(x)  (\nabla \cdot \omega^\sharp)(x) 
+& =\int d\pi(x) \, \varrho(x)\, (\nabla \cdot \omega^\sharp)(x)
+\\
+& =-\int d\pi(x) \, \dangle{\nabla \varrho}{\omega^\sharp)}_x
+	-\int d\pi(x)\,\dangle{\nabla \log \frac{d\pi}{dx}}{\omega^\sharp}_x
+\\
+& =-\int d\mu(x) \, \dangle{\nabla \log \varrho}{\omega^\sharp)}_x
+	-\int d\mu(x)\,\dangle{\nabla \log \frac{d\pi}{dx}}{\omega^\sharp}_x
+}
+Then $\upbar J^{s,\mu}=\upbar J^{\mu}-\upbar J^{a,\mu}=\mu\,\left(\nabla \log \varrho\right)^\flat$.
+
+From (A3), if one defines $c\in C(M;\mc V(M))$ as
+\bel{e:kdec1}{
+c(x,y):=K(x,y)+2 (\nabla U)^\flat(x,y)
+}
+then
+\bel{e:ort1}{
+\sum_{i,j,k} \left[2\,\dangle{c(x_i,x_j)}{(\nabla U)(x_k,x_i)}_{x_i}-\visc (\nabla \cdot c)(x_i,x_j)\right]=0
+}
+}
+%%%END%COMMENT
+
+\newpage
+
+
+
+Let $\bf K$ be the tangent field $\mb K_i(\undx):=\tfrac 1N \sum_{j} K(x_i,x_j)$ and define for $\mu\in \mc P(M^{\otimes N})$ the current $\upbar J_N^\mu$ as
+\bel{e:jntyp}{
+\dangle{\upbar J_N^\mu}{\omega}:= \int d\mu(\undx) \dangle{\mb K}{\omega} + \frac{\nu}2 (\nabla \cdot \omega^\sharp)(x)
+}
+
+Define $I_N \colon \mc X_N \to [0,+\infty]$ as
+\bel{e:in1}{
+I_N(\mu,J):= \sup_{\omega \in C([0,T];\Omega_N)} \int_{[0,T]}dt\,
+\left[
+\dangle{J-\upbar J_N^{\mu_t}}{\omega_t}-\tfrac{\visc}2 \int_{M^{\otimes N}} d\mu_t(\undx) 
+\dangle{\omega_t^\sharp}{\omega_t} 
+\right]
+}
+\bel{e:entn}{
+S_N(\mu):=\frac 1N H(\mu|\pi_N)
+}
+\bel{e:diricn}{
+\mc E_N(\mu):=\int d\pi_N(x)
+}
+
+
+\begin{proposition}
+\label{p:decn}
+Let $(\mu,J)\in \mc X_N$ be such that $I_N(\mu,J)<+\infty$. Then
+\bel{e:decn}{
+I_N(\mu,J)= S_N(\mu_T)-S_N(\mu_0)+\tfrac 12 \int_{[0,T]}dt\,\mc E_N(\mu_t)
++\tfrac 12 \int_{[0,T]}dt\,
+ \left\|J_t-J^{a,\mu_t}_N\right\|_{\mu_t}^2
+}
+
+
+
+\end{proposition}
+
+
+%%%\begin{remark}
+%%% Moreover, if $I(\mu,J)<+\infty$, then
+%%%for some measurable vector field $(\xi_t)$
+%%%\bel{e:jrep1}
+%%%{
+%%%J=\upbar J^\mu+\mu\,\xi
+%%%}
+%%%namely for a.e. $t$
+%%%\bel{e:jrep2}{
+%%%\dangle{J_t}{\omega}=\dangle{\upbar J^\mu_t}{\omega}+\int d\mu_t(x)\dangle{\xi}{\omega}_x \qquad \forall \omega\in \Omega,
+%%%}
+%%%and
+%%%\bel{e:decmec1}{
+%%%I(\mu,J)=\frac 12  \int_{[0,T]\times M} dt\,d\mu_t(x)\, \dangle{\xi_t}{g\xi_t}_x
+%%%}
+%%%\end{remark}
+
+
+
+
+\newpage
+
+
+
+\subsection{Notation and preliminaries}
+\label{ss:2.2}
+A Polish space is a completely metrizable, separable topological space. Recall that closed and open subsets of Polish spaces are Polish w.r.t.\ the relative topology. Given a Polish space $\mc M$, we denote by $\mc P(\mc M)$ the set of Borel probability measures on $\mc M$, and $\mc P(\mc M)$ is itself a Polish space when equipped with the narrow topology, and it is compact iff $\mc M$ is.
+
+Hereafter $(M,g)$ is a smooth Riemmanian manifold with smooth boundary $\partial_M$, and we fix $T>0$ to be interpreted as a final time. Elements of $M$ are denoted with latin letters $x,\,y$ etc. Fixed $N\in \bb N^+$, elements of the product manifold $M^{\otimes N}$ are denoted $\undx\equiv (x_1,\ldots,\,x_N)$. We suppose that we are given $\Sigma_N$ as a closed subset of $M^{\otimes N}$, and
+\bel{e:mn}{
+M_N:=M^{\otimes N}\setminus \Sigma_N
+}
+The case we have in mind is
+\bel{e:mn2}{
+\Sigma_N:=\cup_{i\neq j} \left\{\downbar x\in M^{\otimes N}\,:\:x_i\neq x_j \right\}
+}
+$M_N$ can be regarded both as a (non-complete) Riemmanian manifold, and as a Polish space (being an open subset of the Polish space $M^{\otimes N}$). This is a slightly delicate point. On the one hand $M_N$ is equipped with a Riemmanian distance $d_{g,N}$ induced from the action of the tensor $g_N=g^{\otimes N}$; we always refer to this distance when considering local properties of $M_N$ (smoothness, differential operators etc). However such a distance is not complete on $M_N$; so when dealing with global topological issues (in particular, uniformly continuous functions) we will rather refer to a complete, totally bounded distance $d_N$ on $M_N$. For instance one may take
+\bel{e:dn}{
+& d_N(\undx, \undy):= \frac{\tilde d_N(\undx, \undy)}{1+\tilde d_N(\undx, \undy)}
+\\
+& \tilde d_{N,g}:=d_{N,g}(\undx,\undy)+\left|\tfrac{1}{d_{N,g}(\undx,\Sigma_N)} - \tfrac{1}{d_{N,g}(\undy,\Sigma_N)} \right|
+}
+We denote by $\Omega_N$ the set of infinitely differentiable $1$-forms over $M_N$, uniformly continuous and with  uniformly continuous derivates w.r.t.\ $d_N$. We denote by $\mc J(M_N)$ the set of distributional $1$-currents on $M_N$, that is the dual of $\Omega_N$ equipped with the weak topology. $\nabla,\,\nabla\cdot$ are the co??????variant gradient and divergence operators on $M_N$.
+
+The map
+\bel{e:emp1}{
+\theta_N & \colon M_N \to \mc P(M)
+\\
+\theta_N & \colon \undx \mapsto \theta_N^{\undx}(dy):=\tfrac 1N \sum_{i=1}^N \delta_{x_i}(dy)
+}
+is called the \emph{empirical measure}. It naturally lifts to a map
+\bel{e:emp2}{
+C([0,T];M_N) \mapsto C([0,T];\mc P(M))
+}
+and with a little abuse of notation we still denote with $\theta_N$ such a map. $\theta_N$ induces a pushforward both on $\mc P(M_N)$ and $\mc J(M_N)$. With some abuse of notation, we denote by $\Theta_N$ the pushforward on both spaces, as well as on their product, namely:
+\bel{e:push1}{
+\Theta_N & \colon \mc P(M_N) \times \mc J(M_N) \to \mc P(\mc P(M))\times \mc P(\mc J(M))
+\\
+\Theta_N & \colon (\mu,J)\mapsto \Theta_N(\mu,J)=:(\Theta_N\mu,\Theta_N J)
+\\
+& \Theta_N\mu:=\mu\circ \theta_N^{-1} \qquad \dangle{\Theta_N J}{\omega}:= \tfrac{1}{N}\sum_{i=1}^N \dangle{J}{d^\ast \Pi_i\omega}
+}
+where $d^\ast \Pi_i$ is the co-differential of the $i$-th canonical projection $\Pi_i\colon M_N\to M$.
+
+%\comment{In order to %\bel{e:temp1}
+%{\Theta_N\mu:= \mu \circ \theta_N^{-1}
+%}
+%\bel{e:temp2}{
+%X(t)\in C([0,T];M_N) ==> \delta_{X,\dot X} ==> \delta_{\pi(X(t)),d\pi \dot \gamma}
+%\\
+%J_{X}(\omega)=1/T \int_0^T \langle \dot \gamma,\omega\rangle_{\gamma(t)} == > 1/T \int_0^T \langle \dot \gamma,d^\ast \pi \omega\rangle_{\pi(\gamma(t))}
+%}
+%We infer that if $J\in \mc J(M)$ and $\pi\colon M\to N$, then $\pi_\sharp J\in \mc J(N)$ is defined by $\langle \pi_\sharp J,\omega\rangle= \langle J,d^\ast \pi \omega\rangle$. Now let $\pi_i\colon M_N\to M$ be the projection onto the $i$-th component, $\pi_i(x_1,\ldots,x_N)=x_i$. Then
+%\bel{e:dpi}{
+%d\pi_i(x)=
+%  \begin{array}{cccccc}
+%  1& | &  0 & 0 & 0 & 0 \\ 
+%  2&| & 0 & 0 & 0 & 0 \\ 
+%   i&| & 0 & 0 & I & 0 \\ 
+%   N& | &   0 & 0  & 0  & 0 \\ 
+%  \end{array}
+%}
+%}
+%%
+%%If $J=(d\mu(x_1,\ldots,x_N),v_1(x_1,\ldots,x_N), v_N(x_1,\ldots,x_N))$, then
+%%$$\Theta_N J:= \left(d\mu\circ \theta_N^{-1}(dx), \right)$$
+%%
+%%
+%%$$v \text{ tangente a $M$}, \pi \colon M\to N, (d\pi)  v\, \text{tangente a $N$} $$
+
+\subsection{A functional formulation of differential equations}
+\label{ss:2.3}
+
+\subsection{The convergence criterium}
+\label{ss:2.4}
+\begin{proposition}
+\label{p:tight1}
+Assume equicoercivity of ??????. Then tightness ??????.
+\end{proposition}
+
+\begin{theorem}
+\label{t:crit}
+Assume that
+\begin{itemize}
+\item[(A)] The sequence $\Theta_N \pi^N$ converges to $\pi$ in $\mc P(M)$.
+
+\item[(B)] For any sequence $(m^N,\jmath^N) \in \mc P(M_N)\times \mc J(M_N)$ such that 
+\bel{e:recinf}{
+\lim_{N\to +\infty} (\Theta_N m^N,\Theta_N \jmath^N)= \delta_{(\mu,J)} \qquad \text{in $\mc P(\mc P(M)\times \mc J(M))$}
+}
+it holds
+\bel{e:gammaliminf1}{
+\varliminf_{N\to +\infty} \mc E_N(m^N)\ge \mc E(\mu)
+}
+
+\bel{e:gammaliminf2}{
+\varliminf_{N\to +\infty} \|\jmath^N-\|_{m^N}  \|\ge  \|J-\|_{\mu}  
+}
+\end{itemize}
+Then the convergence ?????? holds. Assume furthermore that the conditions ?????? of Proposition~\ref{p:tight1} hold. Then ??????.
+\end{theorem}
+
+
+\section{Metastability}
+\label{s:3}
+
+The rest is mostly crap. The idea is that maybe one can prove the result as in Pelletier-Savar\'e, which would give really the limit of the process, not just estimates of hitting times. The boundary above comes from the fact that $K$ may have singularities, not a real boundary.
+
+For fixed $N$, $K$ writes as $K=-\nabla U+c$. Just $U$ and $c$ depend on the invariant measure. $\pi_N$ satisfies an SPDE
+\bel{e:pi}{
+& \partial_t u+\nabla \cdot \left(u \,K[u]\right)=\frac{\visc}2 \Delta u+\sqrt{1/N}M
+}
+where $M$ is a martingale with quadratic variation $[M(\phi),M(\phi)]_t=\int_0^t \int du |\nabla \phi|^2 ds$. Then the quadratic decomposition \eqref{e:decn} should hopefully work as in Peletier (which is however reversible). As a start, can we do it when there is no interaction?
+
+
+
+\begin{thebibliography}{63}
+
+\bibitem{Fa14} M.\ Fathi, 2014.
+
+\bibitem{GQ} Godinho, Quininao
+
+\bibitem{FHM} N.\ Fournier, M.\ Hauray, S.\ Micheler
+
+\bibitem{KS} ???
+
+\bibitem{Mc} McKean
+
+\bibitem{Os85} H.\ Osada, A Stochastic Differential Equation Arising from the Vortex Problem, 1985.
+
+\bibitem{Os86} H.\ Osada, 1986.
+
+\end{thebibliography}
+\end{document}

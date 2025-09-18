@@ -1,0 +1,290 @@
+%date 1/12/2015
+
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath,amsfonts,amssymb,amsthm,amscd,mathrsfs}
+\usepackage{stmaryrd}
+\usepackage{cases}
+\usepackage[english]{babel}
+%\usepackage[mathscr]{eucal}
+\usepackage[T1]{fontenc}
+\usepackage{aeguill}
+\usepackage{enumerate}
+
+\usepackage{amsmath,amssymb,graphics,epsfig,color,cite}
+\usepackage{mathrsfs,bbm}
+\usepackage{amsthm}
+\usepackage{amsmath,amssymb,graphics,epsfig,color,
+mathrsfs,bbm}
+
+
+\usepackage{graphics,epsfig,color,cite,bbm}
+
+
+\definecolor{light}{gray}{.9}
+
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+
+\linespread{1.1}
+
+
+
+\pagestyle{plain}
+
+
+
+ 
+
+\newcommand{\pecetta}[1]{
+$\phantom .$
+\bigskip
+\par\noindent
+\colorbox{light}{\begin{minipage}{12.3cm}#1\end{minipage}}
+\bigskip
+\par\noindent
+}
+
+\newcommand{\mb}[1]{\mathbb{#1}}
+\newcommand{\ms}[1]{\mathscr{#1}}
+\newcommand{\mf}[1]{\mathfrak{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\mbf}[1]{\mathbf{#1}}
+\newcommand{\R}[1]{\mb{R}^{#1}}
+\newcommand{\im}{\text{i}}
+
+\newcommand{\Lp}{\mc{L}_+}
+\newcommand{\Np}{\mc{N}_+}
+
+\newcommand{\fp}{F(M\times V)}
+\newcommand{\fps}{F_s(M\times V)}
+\newcommand{\fpa}{F_a(M\times V)}
+\newcommand{\func}[1]
+{F(M\times V^{#1})}
+\newcommand{\funca}[1]
+{F_a(M\times V^{#1})}
+\newcommand{\funcs}[1]
+{F_s(M\times V^{#1})}
+
+\newcommand{\funcc}[1]      %continuous case
+{F(M_{G}\times G^{#1})}
+\newcommand{\funcca}[1]
+{F_a(M_{G}\times G^{#1})}
+\newcommand{\funccs}[1]
+{F_s(M_{G}\times G^{#1})}
+
+\newcommand{\funcv}[1]
+{F(M_{G}\times V^{#1})}
+\newcommand{\funcva}[1]
+{F_a(M_{G}\times V^{#1})}
+\newcommand{\funcvs}[1]
+{F_s(M_{G}\times V^{#1})}
+
+
+\DeclareMathOperator{\Dif}{Dif}
+\DeclareMathOperator{\Sum}{Sum}
+\DeclareMathOperator{\Alt}{Alt}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\dif}{dif}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Tay}{Tay}
+\DeclareMathOperator{\odd}{odd}
+\DeclareMathOperator{\even}{even}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\st}{st}
+\DeclareMathOperator{\Cell}{Cell}
+\DeclareMathOperator{\cell}{cell}
+\DeclareMathOperator{\Card}{Card}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\cut}{Cut}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\spec}{Spec}
+\DeclareMathOperator{\tr}{Tr}
+\DeclareMathOperator{\trace}{tr}
+\DeclareMathOperator{\hess}{Hess}
+\DeclareMathOperator{\lin}{lin}
+\DeclareMathOperator{\symb}{Symb}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\homog}{hom}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\spr}{spr}
+\DeclareMathOperator{\id}{Id}
+\DeclareMathOperator{\const}{Const}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\app}{app}
+\DeclareMathOperator{\range}{Ran}
+\DeclareMathOperator{\ess}{ess}
+\DeclareMathOperator{\osc}{osc}
+\DeclareMathOperator{\rev}{rev}
+\DeclareMathOperator{\inw}{inw}
+%\DeclareMathOperator{\dim}{dim}
+ 
+ \def\variance{{\rm Var}}
+\def\ent{{\rm Ent\,}}% Hessian
+
+
+ 
+ \def\Diag{{\rm Diag\,}}% Diagonal Matrix
+
+\def\sp{{\rm Sp\,}}
+
+\def \Sp{{\rm \, Sp\;}}
+
+
+
+
+\newcommand{\arcsinh}
+{\operatorname{arcsinh}}  % it s the same!
+ 
+ 
+
+\newcommand{\lp}{\langle}
+\newcommand{\rp}{\rangle}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\vrho}{\varrho}
+\newcommand{\vp}{\varphi}
+
+ 
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{assumption}{Assumption}[part]
+
+
+ 
+ 
+ 
+
+
+
+
+  
+
+
+\date{\today}          
+
+\begin{document}
+
+%:
+ 
+
+%\begin{abstract}
+%\end{abstract}
+
+ 
+\
+
+\section{Setting}
+\noindent
+We fix a smooth bounded connected set  $\Omega\subset \mb R^d$, a function $V\in C^2(\overline\Omega; \mb R)$
+and consider the differential operator
+\[     L_0    \   :=    \       \frac 12 \Delta \  -  \   \nabla V \cdot \nabla      \   .    \]
+\pecetta{More generally one may take
+\[     L_0    \   :=    \       \frac 12 \nabla \cdot a \nabla  \  +  \   b  \cdot \nabla      \   ,    \]
+or even work with general Markov processes...
+}
+We denote by $u: [0, \infty)\times \overline{\Omega} \ra \mb R $ the unique solution of 
+\[
+\begin{cases} 
+\partial_t u  \, (t,x) \  =   \     L_0 u  \,  (t,x)              & \text{ for }   (t,x)\in (0, \infty) \times \Omega  \\
+u(0,x)   \  =   \   1      & \text{ for }   x \in \Omega\\
+u(t,x)   \  =  \   0   & \text{ for }   (t,x) \in (0, \infty) \times \partial \Omega     \  .     \\
+\end{cases}    \]
+\pecetta{   Probabilistic interpretation:  $u(t,x) \  =  \  \mb P_x(\tau_\Omega>t)$.}
+Note that $u>0$ and that $u(t, \cdot)\in C^2 (\Omega;\mb R)$. 
+For each $0\leq t \leq T$  let $U_{t, T}:  \Omega \ra \mb R$ be given by 
+\[   U_{t,T} (x)  \  :=   \      \log u (T-t, x)  \  ,   \]
+and consider the differential operator
+\[    L_{t}^T  \  :=  \    L_0    \   +  \   \nabla  U_{t,T}  \cdot \nabla    \  .    \]
+For each fixed $T>0$, we denote by $\{\mb P^T_{x}\}_{x\in \Omega}$ the family of Markov distributions  
+induced by the time-dependent generator   $ L^T := (L_{t}^T)_{t\in [0,T]}$
+on the path space $C([0,T]; \Omega)$. 
+
+\pecetta{Probabilistic interpretation: condition to not be absorbed until time $T$...}
+
+
+ 
+\noindent
+We define for each  path $X\in C([0,T]; \Omega)$
+the empirical measure
+\[   \mu_T(X)  \  :=  \    \frac 1T \int_0^T  \delta_{X_t}   \, dt    \  .   \]
+
+\noindent
+The goal is to study the asymptotic behaviour when $T\ra \infty$ of the probability distribution
+$ P^T_{x}$ on $\mc P (\Omega)$ (the set of probability distributions on $\Omega$)  given by 
+\[    P^T_{x}    \  :=   \    \mb P^T_{x} \circ \mu^{-1}_T     \  .     \]
+
+More precisely, we would like to show:
+
+\
+
+{\bf ``Theorem''}
+
+
+\noindent
+ $\{P_{x}^T\}_{T>0}$ satisfies for $T\ra \infty $ a large deviation principle (uniformly for $x$ in a compact ?) with speed
+ $T$ and rate function 
+ \[   I (\mu)   \  =   \     -    \inf_{f\in C_c^2(\mb R;(0, \infty))}   \int   \frac{L  f}{f} d\mu   \    \  ,    \]
+ where 
+ \[    L   \  :=  \    L_0    \   +  \   \nabla  \log \vp      \cdot \nabla    \  ,    \]
+ and $\vp$ is characterized by $\vp>0$ and  existence of $\lambda>0$ such that
+ \[
+\begin{cases} 
+   - \, L_0 \vp  \,  (x)      \   =   \   \lambda \vp         & \text{ for }   x\in \Omega  \\
+\vp(x)   \  =   \   0        & \text{ for }   x \in\partial \Omega     \  .     \\
+\end{cases}      \]
+
+\
+
+
+\noindent
+We denote in the sequel by $\{\mb Q^T_{x}\}_{x\in \Omega}$ the family of Markov distributions  
+induced by the generator   $ L$ on the path space $C([0,T]; \Omega)$. 
+\pecetta{Probabilistic interpretation: process conditioned to never be absorbed,  ``Q-process". }
+
+\begin{remark}It follows from the usual Donsker-Varadhan principle that  $Q^T_{x}:= \mb Q^T_{x} \circ \mu^{-1}_T$
+satisfies an LDP with rate $I$ ({\bf reference?}). 
+\end{remark}
+
+
+
+\
+
+\section{proof}
+
+
+
+{\bf Upper bound}
+
+......\pecetta{do usual perturbation with gradient fields, the problem is: time dependent drift, how should the perturbing drift depend on $t, T$?
+
+\
+
+mi sembra ne avevamo discusso a luglio, dovrei riuscire a ricostruirlo.    }
+
+{\bf Lower bound}
+........
+
+
+
+\pecetta{Instead of doing upper and lower bound, maybe it is easier to show that $Q^T_x$
+and $P^T_x$ are exponentially equivalent? 
+Something like: let  $\nu, \eta$ random elements in $\mc P(\Omega)$
+define on the same probability space and
+  having distribution respectively $ P_{x}$ and $Q_{x}$. 
+We want to show that for every $\delta>0$
+\[    \limsup_{T\ra \infty}  T^{-1} \log  \ms P(|\nu - \eta|>\delta)    \  =   \    -\infty     \   .   \]
+}
+ 
+ \begin{thebibliography}{99}
+
+
+
+  \end{thebibliography}
+
+ 
+\end{document}

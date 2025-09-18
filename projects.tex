@@ -1,0 +1,885 @@
+%\documentclass[reqno,colorBG]{amsart}
+\documentclass[reqno]{amsart}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[mathscr]{euscript}
+
+\usepackage[small]{caption}
+\usepackage{psfrag}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+\usepackage{tikz}
+\usepackage{color}
+
+\usepackage[notcite,notref]{showkeys}
+
+\makeatletter
+\@addtoreset{equation}{section}
+\makeatother
+
+\renewcommand\theequation{\thesection.\arabic{equation}}
+\renewcommand\thefigure{\arabic{figure}}
+\renewcommand\thetable{\thesection.\arabic{table}}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcounter{as}[section]
+\renewcommand{\theas}{\thesection.\Alph{as}}
+\newcommand{\newas}[1]{\refstepcounter{as}\label{#1}}
+\newcommand{\useas}[1]{\ref{#1}}
+
+\newtheorem{asser}[as]{Assertion}
+
+
+\newcommand{\mc}[1]{{\mathcal #1}}
+\newcommand{\mf}[1]{{\mathfrak #1}}
+\newcommand{\mb}[1]{{\mathbf #1}}
+\newcommand{\bb}[1]{{\mathbb #1}}
+\newcommand{\bs}[1]{{\boldsymbol #1}}
+\newcommand{\ms}[1]{{\mathscr #1}}
+\newcommand{\mt}[1]{{\texttt #1}}
+
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+\renewcommand{\Cap}{{\rm cap}}
+
+\newcommand{\cm}[1]{{\color{magenta} #1}}
+\newcommand{\cb}[1]{{\color{blue} #1}}
+
+\newcommand{\bel}[2]{\begin{equation} \label{#1} \begin{split} #2
+ 					\end{split} \end{equation}}
+
+%%%%%COMMENT
+\usepackage{color}
+\definecolor{light}{gray}{.90}
+\newcommand{\comment}[1]{
+	%%$\phantom .$ %higher inteline before comment
+	\par\noindent
+	\colorbox{light}{\begin{minipage}{120 mm}#1\end{minipage}}
+	\par\noindent
+}
+
+
+\begin{document}
+
+\section{Motivations}
+\subsubsection*{Statistical Mechanics} Statistical Mechanics aims to give a global description of complex systems. As physical systems developed rather complex features such as phase transitions, it was an open question, even just a century ago, whether these features may fit in the Gibbs measure formalism and more generally within the Boltzmann approach. Indeed, the very first example developed mathematically, the Ising model, gave a positive answer. The ensuing mathematical formalism, known today as the Thermodynamic Formalism, has had immense influence in Mathematics and it has become possibly the most powerful and modern tool in Dynamical Systems.
+
+However, one should not be tricked by the names. When compared say to the Ising model, the \emph{Dynamics} in the name Dynamical Systems would refer to translations, space translation physically speaking. An effective, rigorous and quantitative approach to time evolution in Statistical Mechanics remains an elusive goal, somehow out of reach for modern science. Several, somehow unsatisfactory, approaches have been developed, such as introducing spurious random dynamics in the evolution of (even classical, nevermind quantum) complex (high dimensional) systems and studying singular and somehow simpler systems, or oversimplifying the nature and interaction of the phase space.
+
+Regardless of the approach, the role of phase transitions and the existence of multiple equilibrium states (probability measures on the phase space), has clearly a great influence on the dynamical behavior of a physical systems. If we think of a (finite, but large) Ising system below the critical temperature, it should be clear that the system will spend a lot of time close to the support of a pure equilibrium state, then switch to another pure state on a time-scale which becomes longer and longer as the system size diverges. This somehow complex behavior is known as metastability (yet, metastability encompasses a larger set of cases; in the Ising model with positive magnetization, a similar behavior will happen when starting the system on the $-1$ state: we immediately see that dynamical phase transitions are a much more complex problem, which escapes a precise mathematical characterization). 
+
+Metastability phenomena have been the subject of tremendous study in the last century. For our part, we refer to the book by Bovier and DenHollander for some mathematical tools typical of Markov processes
+\footnote{
+Il libro in parte glissa sui lavori di Claudio Landim e compagni, in quanto non scorre buon sangue tra FrankD.H.\ e Claudio. 
+}.
+Roughly speaking (for instance in the Ising model), in the thermodynamic limit, a system should be described by a partition of the phase space (in the case of Ising, the supports of ergodic Gibbs measures -that are mutually singular), a longer time-scale under which the transitions between partitions happens (in the case of the Ising model, sharp results are a largely open question partially solved in $d=2$ and basically zero temperature); a limiting Markov process describing the transitions between the partitions at this longer time-scale. Formally speaking, the metastability nature of the phenomenon is hidden in the Markov nature of the process (otherwise, the projection of any process on an arbitrary measurable partition is still a stochastic process!).
+
+Earlier results mostly treated the time-scale problem (sharp spectral gap estimates and large deviations), which usually requires a keen understanding of the underlying partition of the phase space. In the last fifteen years, mostly via potential theory, some sharper results have been established for several (somehow simple) models, even if mostly limited to a sharp asymptotic of the transition time rather than the convergence of the rescaled process. These type of results include finite-dimensional diffusions (small noise limit, sharp time asymptotic via capacity, Bovier et al.), zero-range processes (thermodynamic limit, capacity and evolution semigroup convergence, Landim et al.), stochastic quantization equation (Berglund et al, sharp time asymptotic, capacity estimates uniform in the Galerkin approximation).
+
+The elephant in the room, from the Statistical Mechanics point of view, is that most of the tools have been developed for reversible processes, and the little results concerning non-reversible processes have been limited to simple models. As well known, reversible dynamics such as Metropolis, has a great deal of applications but in the words of Ulam (the quote is certainly misattributed) \emph{Non-reversible Statistical Mechanics is like non-elephant Biology}.
+
+
+
+
+
+\subsubsection*{Optimization in high dimensions} The classical problem of sampling requires a fast algorithm for extracting independent random variables with a given disitribution $\mu$, say in $\bb R^d$. Due to the curse of dimensionality, except in trivial cases (such as product measures), sampling times diverge catastrophically for $d$ large. A standard technique is rather to simulate a Markov process $X$ with invariant measure $\mu$ up to a time $T$ to be chosen. The process can be started in an arbitrary (maybe smartly chosen, but computationally simple point), and the value of $X_T$ will be the sampled variable. As $d$ grows, simulating $X_T$ is much faster than exactly sampling $\mu$. Of course, the price to pay is that the law $\mu_T$ of $X_T$ will only be close to $\mu$, hopefully exponentially close as $T$ diverges, but not equal. It is then of great practical interest, to find a theorical distance decay $d(\mu_T,\mu)\simeq \exp(- c T) d(\mu_0,\mu)$, so that one can tune the simulation time $T$ depending on the wanted error in the approximation. Running this type of algorithms, known as MonteCarlo Markov Chains (MCMC), sizes a considerable percentage of the world computing power, especially in supercomputers. With machine learning on the rise, the typical dimension at which problems are run has increased dramatically.
+
+A similar problem comes more straightly from high dimensional optimization and ML techniques. In many cases, a part of the problems consists in minimizing a data-depending function depending on many parameters. As a trivial example, suppose we want to estimate the probability that tossing an unfair coin we get tail. We model it via a binomial distribution with unknown parameter $p$. If the data is that we got $k$ tails out of $n$ tossing, we chose $p$ as to maximize $\binom{n}{k}p^k (1-p)^{n-k}$ which of course turns out to be $p=k/n$. In this case we had one parameter and one numerical datum $k$. However, in many fashionable techniques to approach a problem, the probability of an outcome depends on many (thousands or millions) of parameters, and the probability that the dataset 'happened' will be a complicated function $p$ to maximize and depending on the parameters and a vast amount of data. A rather classical technique consists in sampling a random variable from the measure $\exp(-\beta V)/Z$ for $\beta$ large and $V=-p$, and claim it is close to a minimizer of $V$. The measure is then sampled with MCMC: as one expect a faster convergence for smaller $\beta$, usually the simulations are run with larger and larger $\beta$'s, using the results of a smaller $\beta$ as initial datum for a larger $\beta$.
+
+To be precice, optimizing strictly convex functions $V$ can be done with complexity $O(d\log d)$, which is certainly not problematic. So the described techniques have an interest in the nonconvex case. Which again leads back to metastability.
+
+Back to MCMC, we have not discussed the elephan in the room again. What process $X$ should one use for the simulation? Well, the naive answer would be 'the one converging the fastest to $\mu$'. This is certainly not the case, because simulating an i.i.d. Markov chain with marginal disitribution $\mu$ would solve the question, but not the problem. One should rather fix some measure of the complexity of the simulation, for instance the amount of fluctuations in it. So a first step in optimizing the choice of $X$ would be to optimize it within the class giving rise to the same average quadratic variation of observables. Say in continuous times, this would be the quadratic variations of Dynking martingales, which happens to be $\bb E[Lf^2 -2 f Lf]$, where $L$ is the generator of the process. At the invariant measure, this coincides with the Dirichlet form $\mc E(f,f)$ which should be fixed (otherwise, one may just consider $Y_t=X_{2t}$ and speed-up the simulation -which of course does not work). So at the end of the day, we can first try to optimize among processes with the same Dirichlet form $\mc E(f,f)$, namely the same $L+L^\ast$. Ironically, in this class one expects that the (unuique) reversible process is the one converging the slowest, as noted by Rey-Bellet; and yet reversible processes are widely used in MCMC out of habits.
+
+As far as I know, there are three classes of widely used MCMC: finite state Markov chains (at the very end, on a computer everything is finite state and discrete time, but not everything is properly estimated like that - as much as one uses integrals to estimate finite sums); diffusion processes; jump processes (possibly mixed with diffusions).
+
+\section{Three projects}
+
+With the motivations above, there are three projects we may develope.
+
+\begin{itemize}
+	\item Sharp metastability results for mean-field models. Non-trivial nearest-neighbor interaction, or in any case interactions with geometry seems to be out of reach (maybe Kac potentials?). Yet, mean-field are likely the most used class of phenomenological theories in physics, finance and macroeconomy. Reversible vs non-reversible is of great interest here.
+	
+	\item Comparing symmetric vs non-symmetric rate of convergence. There are very few and partial results in the sense 'non-symmetric is faster'. We have studied the case of diffusions in the small noise limit with Claudio and Insuk, I do not know much more. Rey-Bellet papers are informal. I think one can make a simple counterexample to this: symmetric vs asymmetric NN random walk on $\bb Z_n=\bb Z/(n\bb Z)$ -yet the expoential rate of convergence is the same. Yet, at least for diffusions, the situation is more interesting. Let us look at
+	\bel{e:va}{
+\dot X = -B X +\dot W	
+}
+ where $B$ is a matrix with eigenvalues having strictly positive real part. The invariant measure is Gaussian with covariance
+ \bel{e:a}{
+A^{-1}:=\int_0^\infty \exp(- B t) \exp(-B^\dagger t) \,dt
+}	
+It seems to me that $\dot X=-AX+\dot W$ (the reversible process with the same symmetirc Dirichlet form) converges slower to the equilibrium, exponentially slower. A diffusion roughly speaking is a superposition of small noise and linear processes, so maybe this is a general fact. For instance, one may investigate when is it true that
+\bel{e:asfd}{
+\lim_t \tfrac{1}{t} \log \int dm(x) H(\nu_t^x|m) \le \lim_t \tfrac{1}{t}\log \int dm(x) \log H(\mu_t^x|m)
+}
+where $H$ is the relative entropy, $\nu_t^x$ is the law of a Markov process $X_t$ started at $x$, and $\mu_t$ is the law of the Markov process generated by the symmetric part of the the generator of $X$ in $L_2(m)$.
+
+
+\item A potential theory for Markov processes has been developed for diffusions and partly for finite state Markov chains. A general theory for non-reversible processes is lacking.
+\end{itemize}
+
+
+
+\newpage
+
+The equation
+\bel{e:sa}{
+\dot X=b(X)+\sqrt{2/\beta} \dot W
+}
+has invariant measure $m=\exp(- V) dx$ if $V$ solves
+\bel{e:visco}{
+\tfrac{1}\beta |\nabla V|^2 + b \cdot \nabla V=\tfrac{1}\beta \Delta V+\mathrm{div}(b)
+}
+If $b(x)=-A x$, so that $V=\tfrac 12 Sx \cdot x$ where $S$ solves for $\beta=1$ for all $x\in \bb R^d$
+\bel{e:fad}{
+Sx \cdot Sx -A x \cdot Sx=\mathrm{Tr}(S-A)
+}
+So $S$ solves iff $\mathrm{Tr}(S)=\mathrm{Tr}(A)$ and $S S x \cdot x= S^\dagger A$ namely
+\bel{e:fasfd}{
+2 S^2= S A + A^\dagger S
+}
+
+
+\newpage
+\section{Symmetric vs Asymmetric}
+See the Mathematica file from the example described above.
+
+
+If $X_t$ is a Feller process with generator $L$, then
+\bel{e:fa}{
+M_t^f(X):=f(X_t)-f(X_0)-\int_0^t (Lf)(X_s)\,ds
+}
+
+More in general, one can build exponential martingales as
+\bel{e:fa}{
+E_t^t(X):=\exp(f(X_t)-f(X_0)-\int_0^t e^{-f(X_s)}(L e^f)(X_s)\,ds)
+}
+Diffusions are processes $L\phi(f)=\phi'(f) Lf+ \phi''(f) \Gamma(f,f)$ where \bel{e:gamma}{
+\Gamma(f,f)= (L(f^2)-2 f Lf)/2
+}
+for smooth $\phi$. So for a diffusion $E^f_t(X)=\exp(M_t^f - \int_0^t \Gamma(f,f)(X_s)ds)$.
+
+Maybe one may want to compare processes such that
+\bel{e:comp}{
+\mc E_L(f)=\int d\pi(x) e^{-f(x)} (Le^f)(x)
+}
+are the same. For instance
+\bel{e:fa}{
+Lf(x)=\int c(x,dy)(f(y)-f(x))
+}
+\bel{e:comp2}{
+	\mc E_L(f)=\int d\pi(x) c(x,dy) (e^{f(y)-f(x)}-1)
+}
+Given $L$ and $L'$ pure jump generators with the same $\pi$, 
+if $\mc E_L(f)=\mc E_{L'}(f)$ then for each $\varepsilon>0$
+\bel{e:comp3}{
+\int d\pi(x) c(x,dy) (e^{\varepsilon f(y)-\varepsilon f(x)}-1)=\int d\pi(x) c'(x,dy) (e^{\varepsilon f(y)-\varepsilon f(x)}-1)
+}
+which seems to mean that $c$ and $c'$ have the same symmetric part.
+
+
+
+
+\newpage
+\section{Mean Field}
+
+See the other file. Start from the last section of the file.
+
+
+
+
+
+
+
+
+
+\section{Potential Theory}
+
+
+Let $(E,d)$ be a Polish space endowed with its Borel $\sigma$-algebra and a reference probability measure $\pi$. Denote by $L^2 = L^2(\pi)$ the space of square-integrable, real-valued functions defined in $E$. The norm of $L^2$ is represented by $\Vert\,\cdot\,\Vert$. Consider a Markov semigroup with generator $L \colon D(L) \to L^2(\pi)$, with domain $D(L) \subset L^2(\pi)$, see \cite[Definition~1.8]{MR92}.
+
+Denote by $\mc C$ a core for the generator $L$ and assume that $\mc C$
+is closed by multiplication. Denote by $L^\ast$ the adjoint of $L$, and
+assume that $\mc C$ is also a core for $L^\ast$.
+
+Denote by $C(E, D(L))$ the space of continuous functions $\xi \colon E \to
+D(L)$. For a function $\xi \in C(E, D(L))$, we represent $\xi(x) \in
+D(L)$, $x\in E$, by $\xi_x$ and $\xi_x(y) \in E$, $y\in E$, by
+$\xi(x,y)$. 
+
+We assume some sort of sector condition: For each function $f \in
+  D(L)$, there exists a finite constant $C_f$ such that for all $\varphi
+  \in C(E, D(L))$,
+\begin{equation}
+\label{03}
+\Big(\, \int \pi(dx)\, f(x)\, ( L\, \varphi_x)(x) \, \Big)^2 \;\le\;
+C_f \int \pi(dx)\, (L\, \varphi^2_x)(x)\;.
+\end{equation}
+\newpage
+
+
+%\comment{
+If $\varphi(x,y)= g(y)-g(x)$, then this condition is nothing but the sector condition with $C_f= c_K D(f,f)$.
+
+If $L=\Delta$ is the Laplacian on $\bb R^d$, then define $V(x)=(\nabla_y \varphi)(x,x)$. Then 
+$$ V_i(x)= (\partial_{y_i}\varphi)(x,x)$$
+$$\partial_{x_i} V_i(x)= (\partial_{x_i} \partial_{y_i}\varphi)(x,x)+(\partial_{y_i} \partial_{y_i} \varphi)(x,x)$$
+$$\mathrm{div}(V)(x)=
+\sum_{i} \partial_{x_i} V_i(x)= (\Delta_y\varphi)(x,x)+ \sum_i (\partial_{x_i} \partial_{y_i}\varphi)(x,x)
+= (L\varphi_x)(x)
+$$
+$$(L\, \varphi^2_x)(x)= 2 V(x) \cdot V(x)$$
+
+Then the sector-like condition is 
+$$\Big(\, \int\, dx\, f(x)\, \mathrm{div}(V(x)) \, \Big)^2 \;\le\;
+C_f \int dx\, 2 V(x)\cdot V(x) 
+$$
+which holds since integrating by parts this is equivalent to
+$$\Big(\, \int\, dx\, (\nabla f)(x)\, V(x) \, \Big)^2 \;\le\;
+2 C_f \int dx\,  V(x)\cdot V(x) 
+$$
+and therefore it is enough to take $C_f=D(f,f)$.
+%}
+\bigskip
+
+$$ \Gamma(f,g)= L(f g)- f Lg -g Lf$$
+$$D^s(f,g)=\int d\pi(x)\,\Gamma(g,f)$$
+
+$${\bf \Gamma}(\varphi, \psi)(x)=L(\varphi_x \psi_x)(x)$$
+Notice that ${\bf \Gamma}(df,dg)=\Gamma(f,g)$
+If $L=\Delta$, then ${\bf \Gamma}(\varphi, \psi)=2V_\varphi\,V_\psi$
+
+If $Lf=b\cdot df$, then ${\bf \Gamma}(f,g)=0$. Then
+the condition 
+$$\Big(\, \int \pi(dx)\, f(x)\, ( L\, \varphi_x)(x) \, \Big)^2 \;\le\;
+C_f \int \pi(dx)\, (L\, \varphi^2_x)(x)$$
+writes as 
+$$\Big(\, \int \pi(dx)\, f(x)\, ({\bf L} \varphi)(x) \Big)^2 \;\le\;
+C_f \int \pi(dx)\, {\bf \Gamma}(\varphi,\varphi)(x)$$
+If we restrict to the case $\varphi=dg$ then the last condition becomes
+$$\Big(\, \int \pi(dx)\, f(x)\,  (Lg)(x) \Big)^2 \;\le\;
+C_f \int \pi(dx)\, \Gamma(g,g)(x)=2 C_f D(g,g) $$
+which is implied by the sector condition.
+
+
+
+\newpage
+Let us try to prove
+$$\Big(\, \int \pi(dx)\, f(x)\, ({\bf L} \varphi)(x) \Big)^2 \;\le\;
+C_f \int \pi(dx)\, {\bf \Gamma}(\varphi,\varphi)(x)$$
+assuming $L$ is self-adjoint in $L^2(d\pi)$. By self-adjointness
+
+$$2 \int \pi(dx)\, f(x)\, ({\bf L} \varphi)(x)=- \int d\pi(x) {\bf \Gamma}(df,\varphi)
+\le \sqrt{\int d\pi(x) {\bf \Gamma}(df,df) } \sqrt{ \int d\pi(x) {\bf \Gamma}(\varphi,\varphi) }
+$$
+The first equality should follow as
+$$ \int \pi(dx)\, f(x)\, ({\bf L} \varphi)(x)= \int \pi(dx)\,  \lim_{t\to 0} \bb E_x \varphi(X_t,X_0) f(X_0)/t= \lim_{t\to 0} \bb E_\pi \varphi(X_t,X_0) f(X_0)/t
+$$
+By self-adjointness the last quantity also equals
+$$ \lim_{t\to 0} \bb E_\pi \varphi(X_0,X_t) f(X_t)/t=
+ -\lim_{t\to 0} \bb E_\pi \varphi(X_t,X_0) f(X_t)/t=
+ -\lim_{t\to 0}\tfrac{1}{2} \bb E_\pi \varphi(X_t,X_0)( f(X_t)-f(X_0)/t$$
+$$=-\tfrac 12 \int \pi(dx)\, {\bf \Gamma}(df,\varphi)(x)
+$$
+
+\bigskip
+Probably it is enough to do it for pure jump processes. Namely, is it true that
+$$\Big(\, \int \pi(dx) c(x,dy) f(x) \varphi(x,y) \Big)^2 \le 
+C_f \int \pi(dx)\, c(x,dy) \varphi(x,y)^2
+$$
+if we know
+$$\Big(\, \int \pi(dx) c(x,dy) f(x) (g(y)-g(x)) \Big)^2 \le  c\,
+D(f,f) D(g,g)
+$$
+?
+
+\newpage
+Given a Markov process, for each $t\ge 0$ it is defined a measurable $p_t\colon E\to \mc P(E)$, which we denote $p_t(x,dy)$, given by
+$$
+\int p_t(x,dy) f(y) =\mathbb{E}_x[f(X_t)]
+$$
+Moreover
+$$
+\int_{y\in E} p_t(x,dy) p_s(y,dz)=p_{t+s}(x,dz)
+$$
+
+Given a Markov process, with transition probability $p_t$, one can weakly approximate it, with a pure jump process with generator $L_{\varepsilon}f=\varepsilon^{-1} \int_y p_\varepsilon(x,dy) (f(y)-f(x))$. Notice that if the original Markov process admits a generator $L$, then
+$$
+Lf(x) = \lim_{t\to 0} \mathbb{E}_{x} [f(X_t)-f(X_0)]/t= \lim_{t \to 0} \int p_t(x,dy) (f(y)-f(x))/t=\lim_{\varepsilon \to 0} L_{\varepsilon}f(x)
+$$
+
+Notice $c_\varepsilon(x,dy)=\varepsilon^{-1}p_{\varepsilon}(x,dy)$ has TV $\varepsilon^{-1}$
+
+\bigskip
+
+Puro salto: siano $k(dx,dy)=\pi(dx)c(x,dy)$ e $k^\dagger(dx,dy)=k(dy,dx)$, $k^s(dx,dy)=(k(dx,dy)+k^\dagger(dx,dy))/2$. In particolare $k\le 2 \,k^s$. Sia
+$$
+q(x,y)= \frac{k-k^\dagger}{k^s}(x,y) \in [-2,2]
+$$
+
+$$(\int \pi(dx)c(x,dy) f(x)\varphi(x,y))^2
+=(\int k(dx,dy) f(x)\varphi(x,y))^2
+$$
+$$
+=(\tfrac 12 \int k(dx,dy) f(x)\varphi(x,y)-k(dy,dx) f(y)\varphi(x,y)    )^2
+$$
+$$
+=(\tfrac 12 \int k^s(dx,dy) (f(x)-f(y))\varphi(x,y)
+-\tfrac 12 \int (k(dx,dy)-k(dy,dx)) f(x)\varphi(x,y) )^2
+$$
+$$
+\le 2 D(f,f)\mathbb{D}(\varphi,\varphi)+4 (\int k^s(dx,dy) q(x,y) f(x) \varphi(x,y))^2
+$$
+Esempio: $E=\mathbb{T}_N$, $k^s(dx,dy)=1/(2N)(\delta_{y-1}(dy)+\delta_{y+1}(dy))$, $\delta$
+
+
+
+
+\newpage
+
+Let $\ms U_0$, $\ms A$ be the set given by
+\begin{gather*}
+\ms U_0\;=\; \big\{\, \xi \in C(E, D(L)) : \xi_x(x) =0 \;\; \forall \, x\in
+E \,\big\} \;.
+\end{gather*}
+\begin{gather*}
+\ms A\;=\; \big\{\, \xi \in \ms U_0  : \xi_x(y) =-\,\xi_y(x) \;\; \forall \, x\in
+E,\,\xi_x\in \mathcal C \,\big\} \;.
+\end{gather*}
+Define the operator $\bb L: \ms U_0 \to L^2(\pi)$ by
+\begin{align*}
+(\bb L \, \xi)(x) \; & =\; (L\, \xi_x )(x) \;, \quad x\in E  \;.
+\end{align*}
+
+Denote by $\<\!\<\,\cdot\,,\,\cdot\,\>\!\>$ the scalar product on
+$\ms U_0$ defined by
+\begin{equation*}
+\<\!\<\, \xi \,,\, \xi' \,\>\!\> \;:=\; 
+\frac 12\, \int \pi(dx)\, (\bb L \, \xi\, \xi') 
+\;=\; \frac 12\, \int \pi(dx)\, (L \, \xi_x\, \xi'_x) (x)\;.
+\end{equation*}
+Note that $\<\!\<\, \xi \,,\, \xi \,\>\!\> \ge 0$ because, since $\xi$
+vanish on the diagonal,
+\begin{align*}
+\<\!\<\, \xi \,,\, \xi \,\>\!\> \; & =\; \lim_{t\downarrow 0}
+\frac 12\, \int \pi(dx)\, \frac{ (P_t \, \xi^2_x ) (x) - \xi^2_x
+  (x)}{t} \\
+& =\; \lim_{t\downarrow 0}
+\frac 12\, \int \pi(dx)\, \frac{ (P_t \, \xi^2_x ) (x)}{t} \;\ge\;
+0\;. 
+\end{align*}
+
+Denote by $\Vert \,\cdot\,\Vert$ the pre-norm associated to this
+scalar product and by $\sim$ the equivalence relation in $\ms U_0$
+given by $\xi \sim\xi'$ whenever $\Vert \, \xi \,-\, \xi' \,\Vert
+=0$. Let $\ms U$, $\ms H$ be the completions of $\ms U_0$, $\ms A$,
+respectively, with respect to the scalar product
+$\<\,\cdot\,,\,\cdot\,\>$: $\ms U = \overline{\ms U_0 \big|_\sim}$,
+$\ms H = \overline{\ms A \big|_\sim}$.
+
+For every function $f\in L^2(\pi)$, denote by $df \colon E\times E \to
+\bb R$ the function defined by $[(df)(x)] (y) = f(y)-f(x)$. Clearly,
+if $f\in D(L)$, then $df$ belongs to $\ms A$. Note that $\bb L(df)
+\;=\; L f$ and that for every $g$ in $D(L)$, 
+\begin{equation*}
+\<\!\<\, df \,,\, dg  \,\>\!\> \;=\;
+\frac 12\, \int \pi(dx)\, \big \{ L \, f\, g  
+\,-\, \, f\, L g \,-\, \, g\, L f \, \big\} (x)\;.
+\end{equation*}
+As $\pi$ is the stationary state, $\int \pi(dx)\, (L \, f\, g)(x) \,=\,
+0$ so that
+\begin{equation}
+\label{10}
+\<\!\<\, df \,,\, dg  \,\>\!\> \;=\;
+\frac 12 \, \mc D(f,g) \;+\; \frac 12 \, \mc D(g,f)\;.
+\end{equation}
+In the particular case where $f=g$,
+\begin{equation}
+\label{05}
+\big\Vert\, df \, \big\Vert_{\ms H}^2 \;=\;
+- \, \int \pi(dx)\, f(x) \, (L f) (x) \;=\; \mc D(f,f)\;.
+\end{equation}
+\medskip
+
+\subsection{Markov Flows}
+Denote by $\ms F$ the dual of $\ms H$. We refer to $\ms F$ as the
+space of flows.
+
+%\cb{Notice that $\ms F$ can be regarded as $\ms F=\{ \Phi \in \bar {\ms U}^\ast \,:\: \Phi(\xi(x,y)+\xi(y,x))=0\}$.}
+%$\mc M(E\times E)$ the space of measures on $E\times E$.
+%Let $\ms F$ be the space of flows or antisymmetric currents:
+%\begin{equation*}
+%\ms F \;=\; \Big\{ \Phi \in \mc M(E\times E) : \int_{E\times E}
+%\Phi(dx,dy) \, [\varphi(x,y) + \varphi(y,x)] = 0 \, \Big\}\;.
+%\end{equation*}
+%Given $f\in D(L)$, $\Psi_f = df$.
+
+For a function $f:E \to \bb R$, let $\Phi_f: \ms H \to \bb R$ be the
+linear functional defined by
+\begin{equation*}
+\Phi_f (\chi) \;=\;- \,\int \pi(dx)\, f(x)\, (\bb L\, \chi)(x)
+\;=\; - \,\int \pi(dx)\, f(x)\, ( L\, \chi_x)(x) \;.
+\end{equation*}
+By \eqref{03}, for each $f\in D(L)$, $\Phi_f$ is a bounded functional
+and therefore belongs to $\ms F$. 
+
+Notice that for every functions $f$, $g$ in $D(L)$,
+\bel{phig}{
+\Phi_g(df) \;=\; 
+-\, \int \pi(dx)\, g(x)\, (\bb L \, df)(x) \;=\;
+-\, \int \pi(dx)\, g(x)\, (L \, f)(x) \;=\; \mc D(f,g) \;.
+}
+
+For a function $f$ in $D(L)$. let $\Psi_f$ the element of $\ms F$
+defined by
+\begin{equation}
+\label{06}
+\Psi_f (\chi) \;=\; \<\!\<\, df \,,\, \chi \,\>\!\> \;, \quad
+\chi\,\in\, \ms H\;.
+\end{equation}
+As $df$ belongs to $\ms H$, $\Psi_f$ is an element of $\ms F$ and
+\begin{equation}
+\label{07}
+\|\Psi_f\|_{\ms F}^2 \;=\; \|df\|_{\ms H}^2 \;=\; \ms D(f,f)\;,
+\end{equation}
+where the last identity follows from \eqref{05}.
+Indeed, by definition,
+\begin{align*}
+\|\Psi_f\|_{\ms F}^2 \;: & =\; \sup_{\chi} \big\{\, 2 \, \Psi_f(\chi) \,-\,
+\|\chi\|_{\ms H}^2 \, \big \} 
+\; =\; \sup_{\chi\in \ms H} \big\{\, 2 \, \<\!\<\, df \,,\, \chi \,\>\!\>  \,-\,
+\|\chi\|_{\ms H}^2 \, \big \} \;,
+\end{align*}
+and this expression is equal to $\|df\|_{\ms H}^2$. Moreover, for
+every function $g$ in $D(L)$,
+\begin{equation}
+\label{09}
+\Psi_f (dg) \;=\; \<\!\<\, df \,,\, dg \,\>\!\>
+\end{equation}
+
+
+Define the codifferential $d^\ast$ on $\ms F$ as the dual operator of
+$d$, namely
+\begin{equation*}
+(d^\ast \Phi)(f) \;:=\; - \, \Phi(df)\;.
+\end{equation*}
+
+Fix two disjoint, non-empty subsets $A$, $B$ of $E$: $A\not =
+\varnothing$, $B\not = \varnothing$, $A \cap B = \varnothing$.  Let
+$C_{\alpha,\beta}$, $\alpha$, $\beta\in \bb R$, be the subspace of
+real continuous functions given by
+\begin{equation*}
+C_{\alpha,\beta} \;:=\; \big\{ \, f\in C(E)  \,:\,
+f(x) \,=\, \alpha \text{ for $x\in A$ and } f(y)\,=\, \beta \text{ for
+  $y\in B$}, \, f\in D(\mathcal{D}^s) \big\}\;.
+\end{equation*}
+Let $\ms F_\gamma$, $\gamma\in \bb R$, be given by
+\bel{fgamma}{
+\ms F_\gamma \,:=\, 
+\big\{\, \Phi \in \ms F\,:\: d^\ast \Phi(f) \,=\, -\, \gamma 
+\text{ for all $f\in C_{1,0}$} \,\big \}\;.
+}
+
+
+\subsection{Capacity}
+A closed set $A\subset E$ is recurrent if for all $x\in E$, $\bb
+P_x(\tau_A<\infty)=1$. 
+
+\begin{definition}
+\label{def1}
+Two closed recurrent sets $A,\,B\subset E$ have \emph{finite capacity}
+if the function $h(x)\equiv\,h_{A,B}(x)=\bb P_x(\tau_A<\tau_B)$ is in
+the domain of $\mc D(\cdot)$ or equivalently $dh\in \ms H$. In such a
+case we define
+\begin{equation}
+\label{08}
+\Cap(A,B)=\mc D(h,h)
+\end{equation}
+\end{definition}
+
+\begin{lemma}
+\label{l02}
+Fix two disjoint, non-empty subsets $A$, $B$ of $E$.  
+\begin{equation*}
+\Cap (A \,,\, B) \;=\; \Cap^\dagger (A \,,\, B) \;.
+\end{equation*}
+\end{lemma}
+
+\begin{lemma}
+\label{l01}
+Fix two disjoint, non-empty subsets $A$, $B$ of $E$.  For each
+$\alpha$, $\gamma\in \bb R$, $f\in C_{\alpha,0}$ and $\Phi\in \ms
+F_\gamma$,
+\begin{equation}
+\label{04}
+\big[\, \Phi_f \,-\, \Phi\, \big] \, (dh_{A,B})
+\;=\; \alpha \, \Cap(A,B) \,-\, \gamma \;.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+From \eqref{phig}, we have that
+\begin{equation*}
+\Phi_f(dh) \;=\; -\, \int \pi(dx)\, f(x)\, (L \, h)(x) \;.
+\end{equation*}
+Since $LH$ vanishes on $\Omega = (A\cup B)^c$ and $f= \alpha, h$ $0$ on
+$A\cup B$, we may replace in the previous formula, $f$ by $\alpha\, h$
+to get that $\Phi_f(dh) \,=\, \alpha \, \mc D(h,h) \,=\,  \alpha \, \Cap(A,B)$.
+
+On the other hand, by the definition \eqref{fgamma} of $\ms F_\gamma$
+and since $h$ belongs to $C_{1,0}$,
+\begin{equation*}
+\Phi (dh) \;=\; \gamma\;.
+\end{equation*}
+This proves the lemma.
+\end{proof}
+
+\begin{proposition}[Dirichlet Principle]
+\label{prop1}
+Fix two disjoint, non-empty subsets $A$, $B$ of $E$. We have that
+\begin{equation*}
+\Cap(A.B) \;=\; \inf_{f\in C_{1,0}} \inf_{\Phi\in \ms F_0} 
+\|\Phi_f-\Phi\|_{\ms F}^2 \;.
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Fix $f$ in $C_{1,0}$ and $\Phi$ in $\ms F_0$. By the previous lemma
+and by Schwarz inequality,
+\begin{equation*}
+\Cap(A,B)^2 \; =\; \Big\{\, \big[\, \Phi_f \,-\, \Phi\, \big] \,
+(dh_{A,B}) \,\Big\}^2
+\;\le\; \big\Vert\, \Phi_f - \Phi \, \big\Vert_{\ms F}^2 \,
+\big\Vert\, dh \, \big\Vert_{\ms H}^2 \;.
+\end{equation*}
+By \eqref{05} and \eqref{08}, the last term is equal to $\Cap(A,B)$,
+so that $\Cap(A,B)\le \Vert\, \Phi_f- \Phi \,\Vert_{\ms F}^2$ for
+every $f$ in $C_{1,0}$ and $\Phi$ in $\ms F_0$:
+\begin{equation*}
+\Cap(A,B) \;\le\; \inf_{f\in C_{1,0}} \inf_{\Phi\in \ms F_0} 
+\|\Phi_f-\Phi\|_{\ms F}^2 \;.
+\end{equation*}
+
+Let $f_\star = (h + h^\dagger)/2$ and $\Phi_\star = \Phi_{f_\star} -
+\Psi_h$ so that $\Phi_{f_\star} - \Phi_\star = \Psi_h$. By \eqref{08}
+and \eqref{07}, $\Cap(A,B)= \mc D(h,h) = \Vert\, \Psi_{h} \,\Vert_{\ms
+  F}^2 \,=\, \Vert\, \Phi_{f_\star} - \Phi_\star \,\Vert_{\ms F}^2$. Hence, to prove that
+\begin{equation*}
+\inf_{f\in C_{1,0}} \inf_{\Phi\in \ms F_0} 
+\|\Phi_f-\Phi\|_{\ms F}^2 \;\le\; \Cap(A,B) \;,
+\end{equation*}
+it remains to check that $f_\star$ belongs to $C_{1,0}$, and
+$\Phi_\star$ to $\ms F_0$. 
+
+Clearly, $f_\star = (h + h^\dagger)/2 \in C_{1,0}$. To shows that
+$\Phi_\star \in \ms F_0$, fix $g$ in $C_{1,0}$. By definition,
+$\Phi_\star (dg) = \Phi_{f_\star} (dg) - \Psi_h (dg)$. By definition
+of $f_\star$, \eqref{phig}, \eqref{10} and \eqref{09}, this expression
+is equal to
+\begin{align*}
+\frac 12 \, \Big\{\, \mc D (h\,,\, g) \;+\; 
+\mc D (h^\dagger\,,\, g) \;-\; \, \mc D(h \,,\, g) \;-\; 
+\mc D(g \,,\, h)\, \Big\} \;=\;
+\frac 12 \, \big\{\, \mc D (h^\dagger\,,\, g) \;-\; 
+\mc D(g \,,\, h)\, \big\} \;. 
+\end{align*}
+As $g$ belongs to $C_{1,0}$, $g$ coincides with $h$ amd $h^\dagger$ on
+$A\cup B$. Hence, as $Lh = L^\dagger h^\dagger = 0$ on $\Omega$, the
+previous expression is equal to
+\begin{equation*}
+\frac 12 \, \big\{\, -\, \< L^\dagger h^\dagger\,,\, h^\dagger \> \;+\; 
+ \< L h \,,\, h \> \, \big\}
+\;=\; \frac 12 \, \big\{\, \mc D (h^\dagger\,,\, h^\dagger) \;-\; 
+\mc D(h \,,\, h)\, \big\} \;=\; 0
+\end{equation*}
+because both quantities are equal to $\Cap (A,B)$. 
+\end{proof}
+
+\begin{proposition}[Thomson Principle]
+\label{prop2}
+Fix two disjoint, non-empty subsets $A$, $B$ of $E$. We have that
+\begin{equation*}
+\frac 1{\Cap(A.B)} \;=\; \inf_{\Phi\in \ms F_1}  \inf_{f\in C_{0,0}} 
+\|\Phi_f-\Phi\|_{\ms F}^2 \;.
+\end{equation*}
+\end{proposition}
+
+\begin{proof}
+Fix $f$ in $C_{0,0}$ and $\Phi$ in $\ms F_1$. By the previous lemma
+and by Schwarz inequality,
+\begin{equation*}
+1\; =\; \Big\{\, \big[\, \Phi_f \,-\, \Phi\, \big] \,
+(dh_{A,B}) \,\Big\}^2
+\;\le\; \big\Vert\, \Phi_f - \Phi \, \big\Vert_{\ms F}^2 \,
+\big\Vert\, dh \, \big\Vert_{\ms H}^2 \;.
+\end{equation*}
+By \eqref{05} and \eqref{08}, the last term is equal to $\Cap(A,B)$,
+so that $1/\Cap(A,B)\le \Vert\, \Phi_f- \Phi \,\Vert_{\ms F}^2$ for
+every $f$ in $C_{0,0}$ and $\Phi$ in $\ms F_1$:
+\begin{equation*}
+\frac 1{\Cap(A.B)} \;\le\; \inf_{\Phi\in \ms F_1}  \inf_{f\in C_{0,0}} 
+\|\Phi_f-\Phi\|_{\ms F}^2 \;.
+\end{equation*}
+
+To complete the proof of the theorem, it remains to find $g$ in
+$C_{0,0}$ and $\Phi$ in $\ms F_{1}$ such that $\Vert\, \Phi_g \,-\,
+\Phi\, \Vert^2 = 1/\Cap (A,B)$.  Let $g_\star = (h^\dagger-h)/2 \, \Cap
+(A,B)$ and $\Psi_\star = \Phi_{g_\star} + \Psi_{h_0}$, where $h_0 =
+h/\Cap (A,B)$, so that $\Phi_{g_\star} - \Psi_\star = -\, \Psi_{h_0}$. By
+\eqref{08} and \eqref{07}, $1/\Cap(A,B)= \mc D(h_0,h_0) = \Vert\,
+\Psi_{h_0} \,\Vert_{\ms F}^2 \,=\, \Vert\, \Phi_{g_\star} - \Psi_\star
+\,\Vert_{\ms f}^2$. Hence, to prove that \begin{equation*}
+\inf_{f\in C_{1,0}} \inf_{\Phi\in \ms F_0} 
+\|\Phi_f-\Phi\|_{\ms F}^2 \;\le\; \Cap(A.B) \;,
+\end{equation*}
+it remains to check that $g_\star$ belongs to $C_{0,0}$, and
+$\Psi_\star$ to $\ms F_1$. 
+
+Clearly, $g_\star = (h^\dagger - h)/2\, \Cap(A,B) \in C_{0,0}$. To
+shows that $\Psi_\star \in \ms F_1$, fix $f$ in $C_{1,0}$. By
+definition, $\Psi_\star (df) = \Phi_{g_\star} (df) + \Psi_{h_0} (df)$. By
+definition of $g_\star$, \eqref{phig}, \eqref{09} and \eqref{10}, this
+expression is equal to
+\begin{align*}
+& \frac 1{2\, \Cap(A,B)} \, \Big\{\, \mc D (f\,,\, h^\dagger) \;-\; 
+\mc D (f,h) \;+\; \, \mc D(h \,,\, f) \;+\; 
+\mc D(f \,,\, h)\, \Big\} \\
+&\quad \;=\;
+\frac 1{2\, \Cap(A,B)} \, \big\{\, \mc D (f\,,\, h^\dagger) \;+\; 
+\mc D(h \,,\, f)\, \big\} \;. 
+\end{align*}
+As $f$ belongs to $C_{1,0}$, $f$ coincides with $h$ and $h^\dagger$ on
+$A\cup B$. Hence, as $Lh = L^\dagger h^\dagger = 0$ on $\Omega$, the
+previous expression is equal to
+\begin{align*}
+& \frac 1{2\, \Cap(A,B)} \, \big\{\, -\, \< L^\dagger h^\dagger\,,\,
+h^\dagger \> 
+\;-\;  \< L h \,,\, h \> \, \big\} \\
+&\quad 
+\;=\; \frac 1{2\, \Cap(A,B)} \, \big\{\, \mc D (h^\dagger \,,\, h^\dagger) 
+\;+\;  \mc D(h \,,\, h)\, \big\} \;=\; 1
+\end{align*}
+because both quantities are equal to $\Cap (A,B)$.
+\end{proof}
+
+
+
+\subsection{Examples}
+
+\smallskip\noindent{\bf Discrete spaces.}
+
+The operator $\bb L: \ms A \to E$ is given by
+\begin{align*}
+(\bb L \, \xi)(x) \; & =\; (L\, \xi_x )(x) \;, \quad x\in E \\
+& =\; \sum_{y\in E} r(x,y) \, [\xi_x(y) - \xi_x(x)] \\
+& =\; \sum_{y\in E} r(x,y) \, \xi (x,y)  \;.
+\end{align*}
+
+The operator $L^\eta :D(L^\eta) \to B$ given by
+\begin{align*}
+(L^\eta \, f)(x) \;=\; [\, \bb L\, (e^\eta\, df)\,] (x) 
+;=\; \sum_{y\in E} r(x,y) \, e^{\eta(x,y)} \, [f(y) - f(x)]\;.
+\end{align*}
+
+\begin{equation*}
+\<\!\<\, \xi \,,\, \xi' \,\>\!\> \;:=\; \frac 12\, 
+\int_{E\times E} \pi(dx)\, R(x,dy) \, \xi(x,y)\, \xi'(x,y) \;=\;
+\frac 12\, \int \pi(dx)\, (\bb L \xi\, \xi') \;.
+\end{equation*}
+
+\begin{equation*}
+\<\, \xi \,,\, \xi' \,\> 
+\;=\; \frac 12 \sum_{x,y} \pi(x) r_s(x,y) \, \xi(x,y)\, \xi' (x,y)\;.
+\end{equation*}
+
+
+\begin{equation*}
+\Phi_f (\chi) \;=\; \int \pi(dx)\, f(x)\, (\bb L\, \chi)(x)\;.
+\end{equation*}
+
+\subsection{Diffusions.}
+
+Fix $d\ge 1$, and denote by $\bb T^d = [0,1)^d$ the
+$d$-dimensional torus of length $1$.  Denote by {\color{blue}$a(x)$} a
+uniformly positive-definite matrix whose entries $a_{i,j}$ are smooth
+functions: There exist $c_0>0$ such that for all $x\in \bb T^d$,
+$y\in \bb R^d$,
+\begin{equation}
+\label{19}
+y \cdot a (x) \, y \;\ge\; c_0 \, \Vert y \Vert^2 \;,
+\end{equation}
+where {\color{blue} $y\cdot z$} represents the scalar product in
+$\bb R^d$.
+
+\smallskip\noindent{\bf Generator.}
+Denote by $\mc L$ the generator given by
+\begin{equation}
+\label{2-12}
+\mc L f\;=\; \nabla \cdot (a \, \nabla f) \;+\; b \cdot \nabla f \;, 
+\end{equation}
+where $b: \bb T^d \to \bb R^d$ is a smooth vector field. By modifying
+the drift $b$ we could assume the matrix $a$ to be symmetric. We will
+not assume this condition for reasons which will become below. There
+exists a unique Borel probability measure $\mu$ on $\bb T^d$ such that
+$\mu \mc L=0$. This measure is absolutely continuous, $\mu(dx) = m(x)
+dx$, where $m$ is the unique solution to
+\begin{equation}
+\label{2-16}
+\nabla \cdot (a^\dagger \, \nabla m) \;-\; \nabla \cdot (b\, m) \;=\;
+0 \;, 
+\end{equation}
+where {\color{blue}$a^\dagger$} stands for the transpose of $a$. For
+existence, uniqueness and regularity conditions of solutions of
+elliptic equations, we refer to \cite{gt}. Let $V(x) = - \log m(x)$,
+so that $m(x) = e^{-V(x)}$.
+
+We may rewrite the generator $\mc L$ introduced in \eqref{2-12} as
+\begin{equation*}
+\mc L f \;=\;  e^V \nabla \cdot \big( e^{-V} a \nabla f\big)
+\;+\; c\cdot \nabla f\;,
+\end{equation*}
+where {\color{blue} $c=b + a^\dagger \nabla V$}. It follows from
+\eqref{2-16} that
+\begin{equation}
+\label{2-07}
+\nabla \cdot (e^{-V} c) \;=\; 0\;.
+\end{equation}
+This implies that the operator $c\cdot \nabla$ is skew-adjoint in
+$L_2(\mu)$: for any smooth functions $f$, $g: \bb T^d\to \bb R$,
+\begin{equation}
+\label{2-01}
+\int f \, c\cdot \nabla g \, d\mu
+\;=\; -\, \int g\,  c\cdot \nabla f \, d\mu\;.
+\end{equation}
+
+In view of \eqref{2-01}, the adjoint of $\mc L$ in $L_2(\mu)$,
+represented by $\mc L^*$, is given by
+\begin{equation*}
+\mc L^* f \;=\; e^V \, \nabla \cdot \big( e^{-V} a^\dagger \nabla f\big)
+\;-\; c\cdot \nabla f\;,
+\end{equation*}
+while the symmetric part, denoted by $\mc L^s$, $\mc L^s = (1/2)(\mc L
++ \mc L^*)$, takes the form
+\begin{equation}
+\label{2-8}
+\mc L^s f \;=\; e^V \, \nabla \cdot \big( e^{-V} a_s \nabla f\big) \;.
+\end{equation}
+where $a_s$ stands for the symmetrization of the matrix $a$:
+{\color{blue}$a_s = (1/2)[a + a^\dagger]$}.
+
+Recall from \eqref{01}, \eqref{02}, the definition of the spaces
+$C(\bb T^d, D(L))$, $\ms A$ and the operator $\bb L$. In this context,
+for any smooth element $\varphi$ of $C(\bb T^d, D(L))$,
+\begin{equation}
+\label{b02}
+\<\!\<\, \varphi \,,\, \varphi \,\>\!\> \;=\;
+\int_{\bb T^d} \mu(dx)\, (\nabla_y \varphi)(x,x) \cdot a (x)\,
+(\nabla_y \varphi)(x,x) \;.
+\end{equation}
+Hence, as the matrix $a$ is strictly elliptic, $\Vert \varphi \Vert =0
+$ if and only if $(\nabla_y \varphi)(x,x) = 0$ for all $x\in \bb
+T^d$.
+
+Consider a smooth, conservative vector field $\mf v : \bb T^d \to \bb
+R^d$. Recall that conservative means that its line integral over
+closed paths vanishes or, equivalently, that its line integral is path
+independent. Denote by $\varphi_{\mf v} : \bb T^d \times \bb T^d \to
+\bb R$ the function defined by
+\begin{equation*}
+\varphi_{\mf v} (x,y) \;=\; \int_\gamma \mf v (\ell) \, d\ell\;,
+\end{equation*}
+where $\gamma$ is a path from $x$ to $y$. The function $\varphi_{\mf
+  v}$ is well defined because $\mf v$ is conservative. The same
+property yields that $\varphi_{\mf v} (x,y) \,=\, -\, \varphi_{\mf v}
+(y,x)$ so that $\varphi_{\mf v} \in \ms A$. Furthermore, $(\nabla_y
+\varphi_{\mf v}) (x,x) = \mf v(x)$ so that, by \eqref{b02},
+\begin{equation}
+\label{b01}
+\<\!\<\, \varphi_{\mf v} \,,\, \varphi_{\mf v} \,\>\!\> \;=\;
+\int_{\bb T^d} \mu(dx)\, \mf v(x) \cdot a (x)\,
+\mf v (x) \;.
+\end{equation}
+Denote by $\ms V$ the closure of this set in $\ms A$.
+
+We claim that $\ms H = \ms V$. Indeed, since $\ms V$ is contained in
+$\ms H$, it is enough to show that for any smooth $\varphi$ in $\ms A$
+there exists a conservative vector field $\mf v$ such that $(\nabla_y
+\varphi)(x,x) = (\nabla_y \varphi_{\mf v} )(x,x)$ for all $x\in \bb
+T^d$.  Fix such a smooth function $\varphi$ in $\ms A$, define the
+vector field $\mf v$ by $\mf v(x)=(\nabla_y \varphi)(x,x)$. It is clear
+that $(\nabla_y \varphi)(x,x) = (\nabla_y \varphi_{\mf v} )(x,x)$,
+which proves the claim. Thus, in the context of diffusions, the space
+$\ms H$ can be identified with the space of vector fields.
+
+
+\newpage
+
+\smallskip\noindent{\bf Jump processes.}
+
+Consider a family of jump rates $r_\epsilon (x,dy)$ on $\bb
+R^d$. Denote by $\pi_\epsilon (dx)$ the invariant measure. Let
+$\lambda_\epsilon(x) = r_\epsilon (x,\bb R^d) \in [0,\infty]$.
+
+\begin{equation*}
+\<\!\<\, \xi \,,\, \xi' \,\>\!\> 
+\;=\; \frac 12\, \int \pi(dx)\, (\bb L \xi\, \xi')
+\;:=\; \frac 12\, 
+\int_{E\times E} \pi(dx)\, R(x,dy) \, \xi(x,y)\, \xi'(x,y) \;.
+\end{equation*}
+
+\begin{equation*}
+\Cap (A,B) \;=\; \inf
+\end{equation*}
+
+\begin{align*}
+\Phi_f (\xi) \; & =\; \int \pi(dx)\, f(x)\, (\bb L\, \xi)(x) \\
+& =\; -\, \int \pi(dx)\, r(x,dy)\, f(x)\, \xi(x,y) \\
+& =\; \int \pi(dx)\, r_s(x,dy)\, \Big( \frac{f(y) - f(x)}2 \Big) \, \xi(x,y) \\
+&  -\, \int \pi(dx)\, r_a(x,dy)\, \Big( \frac{f(y) + f(x)}2 \Big) \, \xi(x,y) \\
+\end{align*}
+Now
+\begin{align*}
+r_a(x,dy) \;=\; \rho(x,y) \, r_s(x,dy)
+\end{align*}
+last line
+\begin{align*}
+-\, \int \pi(dx)\, r_s(x,dy)\, \rho(x,y) \, \Big( \frac{f(y) + f(x)}2 \Big) \, \xi(x,y) 
+\end{align*}
+
+
+\begin{align*}
+(L_{\epsilon, \beta} f)(x) \;=\;
+\int \mu_\epsilon (x,dy)\, \frac 12 [\, f(y) - f(x)\,] \, e^{-\beta q(x,y)}\;,
+\end{align*}
+where $q(x,y) = V(y) - V(x) + c(x,y)$ and $c$ is symmetric and
+$\mu_\epsilon (x,dy) = [\mu(x + \epsilon dy) + \mu(x - \epsilon dy)]/2$. 
+%Note $\exp
+%\{-\beta V(x) $
+\newpage
+
+
+
+
+\subsection{remains}
+Let $\ms B$ be the set given by 
+\begin{gather*}
+\ms B \;=\; \big\{\eta \in C(E, D(L)) : e^\eta - 1 \in \ms A\, \big\}\;.
+\end{gather*}
+For $\eta\in\ms B$, define the operator $L^\eta :D(L^\eta) \to B$ given by
+\begin{align*}
+(L^\eta \, f)(x) \;=\; [\, \bb L\, (e^\eta\, df)\,] (x) \;.
+\end{align*}
+
+\begin{align*}
+\eta \sim \eta' \quad if \quad L^\eta = L^{\eta'}
+\end{align*}
+\bibliographystyle{plain}
+\bibliography{biblio}
+\end{document}
